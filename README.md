@@ -1,160 +1,122 @@
-Architecture Overview - MyaLphabet.app
+# MyaLphabet.app – School Information Management System
 
-Architecture Style: Microservices
+MyaLphabet.app is a comprehensive school information management platform designed by and for aLphabet internationaL schooL. It helps manage attendance, timetables, cafeteria menus, calendar events, house point systems, and more — all through a centralized web dashboard.
 
+---
 
-Type: Desktop-optimized Web App
+## Features
 
+### Core Modules
+- **Attendance Management**: Track, view, and report attendance by grade-section.
+- **Timetable System**: Interactive grade-wise, teacher-wise, and room-wise scheduling with subject mappings.
+- **School & Class Calendar**: Manage events at school and classroom levels. Supports recurring/multi-day events.
+- **House Point Management**: Assign students to houses and track behavior or achievement-based points.
+- **Cafeteria Menu Planner**: Design weekly menus, create dishes, and gather feedback through a rating system.
 
-API Style: REST
+### Dashboard Overview
+- View quick stats: Attendance %, upcoming events, menu of the day, leaderboard (house points), and recent updates.
+- Fully role-based views for Admin, Teacher, and Student.
 
+### Roles & Access Levels
+- **Admin**: Full access to all modules and configurations.
+- **Teacher**: Access to class-specific attendance, timetables, calendar events, and reports.
+- **Student**: View only access to personal data (timetable, attendance, house points, menus).
 
-Authentication: JWT-based Token Authentication
+---
 
+## Tech Stack
 
-Interconnectivity: All modules interlinked via secure APIs and shared data models
+| Layer         | Tech                         |
+|---------------|------------------------------|
+| Frontend      | React.js + Tailwind CSS + Axios |
+| Backend       | Node.js + Express.js         |
+| ORM           | Prisma                       |
+| Database      | PostgreSQL                   |
+| Auth          | JWT-based Authentication     |
+| Deployment    | Docker + Nginx (optional)    |
 
+---
 
+## 📁 Project Structure
 
-
-1. Frontend - Client Side
-Layer
-Technology
-Purpose
-Framework
-React.js
-Fast, modular, and scalable UI for dashboards and modules
-State Management
-Redux Toolkit + React Query
-Manage global state and server state efficiently
-Styling
-Tailwind CSS + ShadCN UI
-Consistent, responsive, customizable design system
-Routing
-React Router DOM
-Module-based and nested routing
-Charting
-Recharts or Chart.js
-Display analytics (attendance stats, house points, etc.)
-Form Handling
-React Hook Form + Yup
-Forms for attendance, events, ratings, etc.
-Calendar Views
-FullCalendar or React Big Calendar
-For calendar UI in class and school calendar modules
-
-
-
-
-
-
-
-
-2. Backend - Server Side APIs
-Layer
-Technology
-Purpose
-Framework
-.NET 7+ (ASP.NET Core Web API)
-Robust, secure, scalable RESTful API service
-Authentication
-Identity + JWT
-User login, roles, secure endpoints
-ORM
-Entity Framework Core
-Database mapping and migration
-Caching
-Redis 
-Performance boost for timetable & dashboard queries
-Email/Notifications
-MailKit or SendGrid
-Notification for point updates, reminders, alerts
-File Upload/Export
-iTextSharp
-For attendance PDF/Excel exports
+myalphabet-app/
+├── backend/
+│ ├── src/
+│ │ ├── prisma/ # Prisma schema & migrations
+│ │ ├── routes/ # API routes (attendance, calendar, etc.)
+│ │ ├── controllers/ # Business logic per module
+│ │ ├── middleware/ # Auth and error handling
+│ │ └── app.ts # Express server setup
+├── frontend/
+│ ├── src/
+│ │ ├── pages/ # React pages by module
+│ │ ├── components/ # Shared components (navbar, sidebar, etc.)
+│ │ └── utils/api.ts # Axios API wrapper
 
 
-3. Database - Persistence Layer
-Component
-Technology
-Purpose
-Relational DB
-MS SQL Server
-Structured storage of all school data
-NoSQL 
-MongoDB 
-Store logs, menu ratings, dashboard cache, etc.
-Blob/File Storage
-Azure Blob / AWS S3 / Local File System
-Store reports, attachments, student photos
+
+## API Overview
+
+| Method | Endpoint                       | Description                    |
+|--------|--------------------------------|--------------------------------|
+| POST   | `/api/auth/login`              | User login                     |
+| GET    | `/api/attendance/my-attendance`| Fetch logged-in user's attendance |
+| POST   | `/api/attendance/mark`         | Mark attendance (admin/teacher)|
+| GET    | `/api/calendar/school`         | Get school events              |
+| POST   | `/api/calendar/class`          | Add/edit class calendar events |
+| GET    | `/api/house/points`            | View house leaderboard         |
+| POST   | `/api/menu/create`             | Create weekly menu             |
+| GET    | `/api/menu/this-week`          | Get menu for the current week  |
+
+> Full API documentation is available in the `/docs` directory.
+
+---
+
+## UI Sketches (Figma)
+
+- Text-based UI sketches and master wireframe flow are available in documentation.
+- Includes side menu layouts, dashboards, and module-specific page layouts.
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+`bash
+git clone https://github.com/your-org/myalphabet-app.git
+cd myalphabet-app`
 
 
-4. Security
-Feature
-Tech
-Details
-Authentication
-JWT
-Secure access tokens
-Authorization
-Role-Based Access Control
-Roles: Super Admin, Admin, Teacher, Student
-Audit Logs
-Custom Middleware
-Track logins, updates, deletions
-HTTPS
-TLS
-Enforced across entire application
-Rate Limiting
-Middleware (e.g., AspNetCoreRateLimit)
-Prevent brute-force attacks
+### 2. Backend Setup
 
-5. DevOps & Hosting
-Layer
-Tech Stack
-Purpose
-Source Control
-Git + GitHub/GitLab
-Version control & CI/CD
-CI/CD
-GitHub Actions / Azure DevOps
-Build, test, deploy
-Containerization
-Docker
-For consistent deployment
-Web Hosting
-Azure App Service / IIS / AWS EC2
-Host backend APIs
-Frontend Hosting
-Azure Static Web Apps / Vercel / Netlify
-Deploy frontend
-Monitoring
-Azure Monitor / Application Insights
-Track performance & errors
+`bash 
+cd backend
+cp .env.example .env
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run dev`
+
+### 3. Frontend Setup
+
+`bash
+cd frontend
+npm install
+npm start
+Development Progress
+Prisma schema created`
+
+ Boilerplate backend and frontend integrated
+
+Module UI wireframes prepared
+
+Unit tests and CI/CD pipeline
+
+Mobile view optimization
+
+📄 License
+This project is licensed under the IT Dept - aLphabet internationaL schooL© 2025.
 
 
-6. Predictable Tools
-Tool
-Use Case
-Swagger / Swashbuckle
-Auto-generate API documentation
-Postman Collection
-API testing and documentation
-Power BI (future)
-Deeper school analytics on attendance, points, etc.
-SignalR (future)
-Real-time updates for attendance/notifications
-
-
-Future Expansion
-PWA (Progressive Web App) for mobile-like experience
-
-
-GraphQL API Gateway for better frontend querying
-
-
-Multilingual Support using i18n
-
-
-Role-based dashboard widgets visibility
 
